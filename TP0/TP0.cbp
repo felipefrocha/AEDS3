@@ -42,6 +42,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="pilha.h" />
+		<Unit filename="solve.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="solve.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>

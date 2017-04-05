@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "solve.h"
-
 #include <math.h>
-
+#include "solve.h"
 #define MAXCHAR 10000
+
 
 int main()
 {
@@ -13,6 +12,7 @@ int main()
     bool ** matrix_operacoes;
     int resposta;
     bool flag;
+    int listaNumeros[100];
 
     linha = malloc(MAXCHAR*sizeof(char));
     //teste falha alocação
@@ -23,37 +23,39 @@ int main()
     scanf("%d",&resposta);
 
     int i,j,aux;
+
     int n_operacoes = 0;
-    bool *vetor;
-    int listaNumeros[100];
+
+    //bool *vetor;
     j = 0;
     aux = 0;
-    for(i = 0 ; linha[i] != '\n'  ; i++)
+    for(i = 0 ; linha[i-1] != '\n'  ; i++)
     {
-
         if(linha[i] >= 48 && linha[j] <= 57)
         {
             aux = aux * 10;
             aux = aux +  (linha[i]-48);
             flag = true;
-            printf("%d \n",aux);
+            //printf("%d issae \n",aux);
         }
         else if (flag == true)
         {
-            printf("%d \n",aux);
+            printf("%d nada \n",aux);
+            listaNumeros[j];
+            j++;
             flag = false;
             aux = 0;
         }
-        printf("\t%d\n",flag);
         if(linha[i]=='?') n_operacoes++;
-
-        listaNumeros[j] = aux;
-        j++;
-
     }
+    sendInteiro(listaNumeros);
+
     int nOpera = pow(2,n_operacoes);
+
     matrix_operacoes = malloc((nOpera)*sizeof(bool*));
-    vetor = malloc (n_operacoes*sizeof(bool));
+
+    //vetor = malloc (n_operacoes*sizeof(bool));
+
     printf("\n%d\n",nOpera);
     for (i = 0; i < nOpera; i++)
     {
@@ -76,9 +78,9 @@ int main()
         {
             printf("\t%d" ,matrix_operacoes[i][j]);
         }
+        free(matrix_operacoes[i]);
     }
-
-
+    free(matrix_operacoes);
     printf("\n \t %s \t %d",linha, n_operacoes);
 
     return 0;
