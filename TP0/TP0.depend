@@ -1,0 +1,25 @@
+# depslib dependency file v1.0
+1480271547 source:d:\felipe\documents\programação\tp0\celula.c
+	<stdio.h>
+	<stdlib.h>
+	"celula.h"
+
+1480271514 d:\felipe\documents\programação\tp0\celula.h
+
+1491326247 source:d:\felipe\documents\programação\tp0\pilha.c
+	<stdio.h>
+	<stdlib.h>
+	"pilha.h"
+	"celula.h"
+
+1480271514 d:\felipe\documents\programação\tp0\pilha.h
+	"celula.h"
+
+1491359678 source:d:\felipe\documents\programação\tp0\main.c
+	<stdio.h>
+	<stdlib.h>
+	"solve.h"
+
+1491339009 d:\felipe\documents\programação\tp0\solve.h
+	"pilha.h"
+
