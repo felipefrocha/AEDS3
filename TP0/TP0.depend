@@ -28,27 +28,28 @@
 	<stdlib.h>
 	"celula.h"
 
-1480271514 d:\felipe\documents\github\aeds3\tp0\celula.h
+1492225476 d:\felipe\documents\github\aeds3\tp0\celula.h
 
-1491326247 source:d:\felipe\documents\github\aeds3\tp0\pilha.c
+1492320631 source:d:\felipe\documents\github\aeds3\tp0\pilha.c
 	<stdio.h>
 	<stdlib.h>
 	"pilha.h"
 	"celula.h"
 
-1480271514 d:\felipe\documents\github\aeds3\tp0\pilha.h
+1492319783 d:\felipe\documents\github\aeds3\tp0\pilha.h
 	"celula.h"
 
-1491413699 source:d:\felipe\documents\github\aeds3\tp0\main.c
+1492320797 source:d:\felipe\documents\github\aeds3\tp0\main.c
 	<stdio.h>
 	<stdlib.h>
-	"solve.h"
 	<math.h>
-
-1491413938 d:\felipe\documents\github\aeds3\tp0\solve.h
+	<string.h>
 	"pilha.h"
 
-1491413972 source:d:\felipe\documents\github\aeds3\tp0\solve.c
+1492223374 d:\felipe\documents\github\aeds3\tp0\solve.h
+	"pilha.h"
+
+1491414459 source:d:\felipe\documents\github\aeds3\tp0\solve.c
 	<stdio.h>
 	<stdlib.h>
 	"solve.h"

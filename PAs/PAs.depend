@@ -1,7 +1,8 @@
 # depslib dependency file v1.0
-1491537495 source:d:\felipe\documents\github\aeds3\pas\main.c
+1492220922 source:d:\felipe\documents\github\aeds3\pas\main.c
 	<stdio.h>
 	<stdlib.h>
+	<string.h>
 
 1491516917 d:\felipe\documents\github\aeds3\pas\pa1.c
 	<stdio.h>

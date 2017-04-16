@@ -1,12 +1,8 @@
 #ifndef CELULA_H_INCLUDED
 #define CELULA_H_INCLUDED
-
-typedef enum boolean
-{
-    true = 1,
-    false = 0
-};
-typedef enum boolean bool;
+#define bool short
+#define false 0
+#define true 1
 
 typedef struct {
     struct celula * topo;

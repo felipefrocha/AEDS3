@@ -10,7 +10,7 @@ typedef struct{
 
 pilha * CriaPilha(void);
 void Empilha(pilha*p,int inteiro);
-void Desempilha(pilha*p, int* recupera);
+void Desempilha(pilha*p, int * recupera);
 void ImprimePilha(pilha *p);
 bool PilhaVazia(pilha* p);
 void LiberaPilha(pilha *p);

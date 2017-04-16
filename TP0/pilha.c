@@ -27,7 +27,7 @@ void Empilha(pilha*p,int inteiro)
     p->topo = c;
     p->tamanho++;
 }
-void Desempilha(pilha*p, int *recupera)
+void Desempilha(pilha*p, int * retorna)
 {
     celula * c;
     if(!PilhaVazia(p)) { c = p->topo;/* printf("\n\tpilha nao vazia");}*/}
@@ -35,23 +35,26 @@ void Desempilha(pilha*p, int *recupera)
     p->topo = c->anterior;
     p->tamanho--;
     if(!c->anterior) {
+            //printf( "\ndado sendo liberado: %d  ;\n",c->dados);
+            *retorna = c->dados;
             LiberaCelula(c);
             return;
     }
     else p->topo->topo = NULL;
 
-    printf( "\ndado sendo liberado: %d  ;\n",c->dados);
-    *recupera = c->dados;
+    //printf( "\ndado sendo liberado: %d  ;\n",c->dados);
+    *retorna = c->dados;
     LiberaCelula(c);
+
 }
 bool PilhaVazia(pilha* p)
 {
-    if(!p->topo)
+    if(!p->tamanho)
     {
-        printf("\n\t PILHA ESTÁ VAZIA0");
-        return 1;
+        //printf("\n\t PILHA ESTÁ VAZIA0");
+        return true;
     }
-    else return 0;
+    else return false;
 }
 void ImprimePilha(pilha *p)
 {
