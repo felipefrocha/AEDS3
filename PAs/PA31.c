@@ -39,32 +39,34 @@ bool insert(struct TrieNode *root, const char *key)
     int level;
     int length = strlen(key);
     int index;
-    int i,j;
-    i = j = 0;
+    int i;
+    bool test = false;
 
     struct TrieNode *pCrawl = root;
 
     for (level = 0; level < length; level++)
     {
         index = CHAR_TO_INDEX(key[level]);
-        if(pCrawl->isLeaf)i++;
-        if (!pCrawl->children[index]) {pCrawl->children[index] = getNode();j++;}
+        if (!pCrawl->children[index])
+            pCrawl->children[index] = getNode();
+
         pCrawl = pCrawl->children[index];
     }
+    if(pCrawl->isLeaf) test = true;
+    //for(i = 0 ; i < ALPHABET_SIZE ; i++) if(pCrawl->children[i] && i != index)test = true;
     pCrawl->isLeaf = true;
-    if(i || !j)return false;
-    return true;
+    return test;
 }
 
 int main(){
     long nTestes;
     long i;
-    bool k = false;
+    bool k;
+    struct TrieNode *root = getNode();
     while(1)
     {
         scanf("%ld", &nTestes);
         if(!nTestes) return 0;
-        struct TrieNode *root = getNode();
         k = false;
 
 
@@ -72,10 +74,9 @@ int main(){
         {
             char linha[MAXLINHA] = {};
             scanf("%s",linha);
-            if(!insert(root, linha)) k = true;
+            if(insert(root, linha)) k = true;
         }
-        free(root);
-        if(k) printf("Conjunto Ruim\n");
+        if(!k) printf("Conjunto Ruim\n");
         else printf("Conjunto Bom\n");
     }
     return 0;

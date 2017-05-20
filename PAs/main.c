@@ -1,81 +1,138 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#define bool int
-#define true 1
+#define bool short
 #define false 0
-#define MAXLINHA 150
-#define ALPHABET_SIZE (26)
-#define CHAR_TO_INDEX(c) ((int)c - (int)'a')
+#define true 1
 
-
-struct TrieNode
+struct Edge
 {
-    struct TrieNode *children[ALPHABET_SIZE];
-    bool isLeaf;
+    int src, dest, weight;
 };
-
-struct TrieNode *getNode(void)
+struct Graph
 {
-    struct TrieNode *pNode = NULL;
-
-    pNode = (struct TrieNode *)malloc(sizeof(struct TrieNode));
-
-    if (pNode)
-    {
-        int i;
-
-        pNode->isLeaf = false;
-
-        for (i = 0; i < ALPHABET_SIZE; i++)
-            pNode->children[i] = NULL;
-    }
-
-    return pNode;
-}
-
-bool insert(struct TrieNode *root, const char *key)
+    int V, E;
+    struct Edge* edge;
+};
+struct Graph* createGraph(int V, int E)
 {
-    int level;
-    int length = strlen(key);
-    int index;
+    struct Graph* graph = (struct Graph*) malloc( sizeof(struct Graph) );
+    graph->V = V;
+    graph->E = E;
 
-    struct TrieNode *pCrawl = root;
+    graph->edge = (struct Edge*) malloc( graph->E * sizeof( struct Edge ) );
 
-    for (level = 0; level < length; level++)
-    {
-        index = CHAR_TO_INDEX(key[level]);
-        if (!pCrawl->children[index])
-            pCrawl->children[index] = getNode();
-
-        pCrawl = pCrawl->children[index];
-    }
-    if(pCrawl->isLeaf) return true;
-    // mark last node as leaf
-    pCrawl->isLeaf = true;
-    return false;
+    return graph;
 }
-
-int main(){
-    long nTestes;
-    long i;
-    bool k;
-    struct TrieNode *root = getNode();
-    while(1)
+struct subset
+{
+    int parent;
+    int rank;
+};
+int find(struct subset subsets[], int i)
+{
+    if (subsets[i].parent != i)
     {
-        scanf("%ld", &nTestes);
-        if(!nTestes) return 0;
-        k = false;
+            subsets[i].parent = find(subsets, subsets[i].parent);
+    }
+    return subsets[i].parent;
+}
+void Union(struct subset subsets[], int x, int y)
+{
+    int xroot = find(subsets, x);
+    int yroot = find(subsets, y);
 
-
-        for(i = 0; i < nTestes ; i++)
-        {
-            char linha[MAXLINHA] = {};
-            scanf("%s",linha);
-            if(insert(root, linha)) k = true;
+    if (subsets[xroot].rank < subsets[yroot].rank)
+    {
+        subsets[xroot].parent = yroot;
+    }
+    else if (subsets[xroot].rank > subsets[yroot].rank)
+    {
+        subsets[yroot].parent = xroot;
+    }
+    else
+    {
+        subsets[yroot].parent = xroot;
+        subsets[xroot].rank++;
+    }
+}
+int myComp(const void* a, const void* b)
+{
+    struct Edge* a1 = (struct Edge*)a;
+    struct Edge* b1 = (struct Edge*)b;
+    return a1->weight > b1->weight;
+}
+void isort(struct Graph * g)
+{
+    int i;
+    struct Edge e;
+    for (i = 0; i < g->E-1; ++i)
+    {
+        if(g->edge[i].weight > g->edge[i+1].weight){
+            e = g->edge[i];
+            g->edge[i] = g->edge[i+1];
+            g->edge[i+1] = e;
         }
-        if(!k) printf("Conjunto Ruim\n");
-        else printf("Conjunto Bom\n");
     }
+
+}
+int algKruskal(struct Graph* graph)
+{
+    int V = graph->V;
+    struct Edge result[V];
+    int e = 0;
+    int i = 0;
+    int v;
+
+    qsort(graph->edge, graph->E, sizeof(graph->edge[0]), myComp);
+    isort(graph);
+
+    struct subset *subsets = (struct subset*) malloc( V * sizeof(struct subset) );
+
+    for (v = 0; v < V; ++v)
+    {
+        subsets[v].parent = v;
+        subsets[v].rank = 0;
+    }
+    while (e < V - 1)
+    {
+        struct Edge next_edge = graph->edge[i++];
+
+        int x = find(subsets, next_edge.src);
+        int y = find(subsets, next_edge.dest);
+
+        if (x != y)
+        {
+            result[e++] = next_edge;
+            Union(subsets, x, y);
+        }
+
+    }
+    int aux=0;
+    for (i = 0; i < e; ++i)
+    {
+        aux +=result[i].weight;
+    }
+    free(subsets);
+    return aux;
+}
+
+int main()
+{
+    int R, C,  V, W, P;
+
+    scanf("%d %d",&R,&C);
+    struct Graph* graph = createGraph(R, C);
+    int i;
+    for (i = 0 ; i < C; i ++)
+    {
+        scanf("%d %d %d",&V,&W,&P);
+        graph->edge[i].src = V-1;
+        graph->edge[i].dest = W-1;
+        graph->edge[i].weight = P;
+    }
+
+    printf("%d\n",algKruskal(graph));
+    free(graph->edge);
+    free(graph);
     return 0;
 }

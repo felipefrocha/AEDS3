@@ -1,0 +1,38 @@
+# depslib dependency file v1.0
+1495312804 source:d:\felipe\documents\github\aeds3\tps\main.c
+	<stdio.h>
+	<stdlib.h>
+	"fordFulkersonAlg.h"
+
+1495306778 d:\felipe\documents\github\aeds3\tps\tp1.h
+	"grafoMatrixAdj.h"
+	"fordFulkersonAlg.h"
+
+1495309917 d:\felipe\documents\github\aeds3\tps\grafomatrixadj.h
+
+1495306555 d:\felipe\documents\github\aeds3\tps\fordfulkersonalg.h
+	"grafoMatrixAdj.h"
+	"filaVetor.h"
+
+1495305064 d:\felipe\documents\github\aeds3\tps\filavetor.h
+
+1495306666 source:d:\felipe\documents\github\aeds3\tps\tp1.c
+	<stdio.h>
+	<stdlib.h>
+	"TP1.h"
+
+1495307028 source:d:\felipe\documents\github\aeds3\tps\filavetor.c
+	<stdio.h>
+	<stdlib.h>
+	"filaVetor.h"
+
+1495310473 source:d:\felipe\documents\github\aeds3\tps\fordfulkersonalg.c
+	<stdio.h>
+	<stdlib.h>
+	"fordFulkersonAlg.h"
+
+1495312744 source:d:\felipe\documents\github\aeds3\tps\grafomatrixadj.c
+	<stdio.h>
+	<stdlib.h>
+	"grafoMatrixAdj.h"
+
