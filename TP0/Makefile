@@ -1,5 +1,5 @@
 solve: celula.o pilha.o solve.o main.o
-	gcc solve.o main.o -o solve
+	gcc solve.o main.o -o solve #inserir comentário
 main.o: main.c solve.h
 	gcc -g -c main.c
 solve.o: solve.c solve.h pilha.h
