@@ -2,30 +2,29 @@
 #include <stdlib.h>
 #include "fordFulkersonAlg.h"
 
-
-
-int minimo(int x, int y) {
+int minimo(int x, int y)
+{
     return x<y ? x : y;  // returns minimum of x and y
 }
+
 int bfs (int inicio, int alvo, int * cor, int * pred, int **fluxo, Grafo * g) {
 
     int u,v;
     int n = g->vertices;
 
-    printf("chamou BFS\n");
-
     for (u=0; u<n; u++) cor[u] = BRANCO;
 
-    Fila * f = criaFilaVazia(MAX_VERTICES+2);
+    Fila * f = criaFilaVazia(n);
+
     enfilera(f, inicio, cor);
+
     pred[inicio] = -1;
+
     while (f->inicio!=f->fim)
     {
         u = desenfilera(f,cor);
-            // Search all adjacent white nodes v. If the capacidade
-            // from u to v in the residual network is positive,
-            // enqueue v.
-        for (v=0; v<n; v++)
+
+        for (v = 0; v < n; v++)
         {
             if (cor[v]==BRANCO && g->capacidade[u][v]-fluxo[u][v]>0)
             {
@@ -35,11 +34,9 @@ int bfs (int inicio, int alvo, int * cor, int * pred, int **fluxo, Grafo * g) {
         }
     }
     destroiFila(f);
-    // If the color of the target node is black now,
-    // it means that we reached it.
     return cor[alvo]==PRETO;
 }
-
+//Teste
 int maxFluxo (int origem, int sorvedor, Grafo * g) {
     int i,j,u;
 
@@ -55,14 +52,8 @@ int maxFluxo (int origem, int sorvedor, Grafo * g) {
     {
         fluxo[i] = calloc(n,sizeof(int));
     }
-    printf("chamouMaxFLuxo\n");
-
-
-    // While there exists an augmenting path,
-    // increment the flow along this path.
     while (bfs(origem, sorvedor, cor, pred, fluxo, g))
     {
-            // Determine the amount by which we can increment the flow.
         int adiciona = INFINITO;
         for (u=n-1; pred[u]>=0; u=pred[u])
         {
@@ -76,6 +67,15 @@ int maxFluxo (int origem, int sorvedor, Grafo * g) {
         maxFluxo += adiciona;
     }
 
+//    for(i = 0 ; i < n ; i++)
+//    {
+//        for (j = i ; j < n ; j++)
+//        {
+//            g->capacidade[i][j] = fluxo[i][j];
+//            //printf("\t%d",g->capacidade[i][j]);
+//        }
+//    }
+
     for (i = 0; i < n; i++)
     {
         free(fluxo[i]);
@@ -84,6 +84,5 @@ int maxFluxo (int origem, int sorvedor, Grafo * g) {
     free(cor);
     free(pred);
 
-    // No augmenting path anymore. We are done.
     return (maxFluxo-INFINITO);
 }

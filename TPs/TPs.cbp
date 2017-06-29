@@ -31,19 +31,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="filaVetor.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="filaVetor.h" />
-		<Unit filename="fordFulkersonAlg.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="fordFulkersonAlg.h" />
-		<Unit filename="grafoMatrixAdj.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="grafoMatrixAdj.h" />
 		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="mainTP1.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

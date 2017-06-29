@@ -1,63 +1,68 @@
+
+
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#define MAXCHAR 10001
-
-int bmhs (char* texto, int n, char *P, int m)
+#define MAXN 100001
+#define ERR 0.000005
+int min(const void* a, const void* b)
 {
-    int i, j , k , d[MAXCHAR];
-    int count = 0;
-    for (j = 0 ; j <= MAXCHAR; j++)d[j] = m+1;
-    for (j = 1 ; j <= m; j++) d[P[j-1]]=m-j+1;
-    i=m;
-    while (i<=m)
-    {
-        k = i;
-        j = m;
-        while ((texto[k-1] == P[j-1]) && (j>0)){k--;j--;}
-        if(j==0) count++;
-        i+=d[texto[i]];
-    }
-    return count;
+    return((*(int*)a)>(*(int*)b)?-1:1);
 }
-char** montaMatrixSub(char* texto , char ** subs, int N)
+double buscaBinaria (const int x, const int *v ,int N, double e, double d)
 {
-    int i,j;
+     int i;
+     double H;
+     H = (e + d)/2.0;
+     double area=0;
+     //printf("\n %.2f\n", H);
+     for(i = 0; (i < N) && (v[i]>=H) ;i++){
+        //printf(" %.2f %.2f | ",area,(double)v[i]-H);
+        area+=((double)v[i]-H);
+     }
 
-    for(i = 0 ; i < (strlen(texto)-N+1);i++)
-    {
-        subs[i] = (char*)malloc(N*sizeof(char));
-        if (!subs[i]){perror(NULL);exit(EXIT_FAILURE);}
-        for(j = 0; j < N ;j++) {subs[i][j] = texto[j+i];}
-        subs[i][j] = '\n';
-        printf("\n%s",subs[i]);
+     //printf("\n area %.2f - area ob %.4f\t altura %.4f\tmenor %.2f\tmenor%.2f ",(double)x,area, H,e,d);
+     if ((d-e)< ERR)
+        return H;
+     else if( area > (double)x){
+        return buscaBinaria(x,v,N,H,d);
+     }
+     else{
+        return buscaBinaria(x, v,N, e,H);
+     }
+}
+
+
+int nada(){
+	int N,A;
+	double H;
+	int v[MAXN];
+	int v2[MAXN];
+    int soma,i,j,n,t;
+    int menor,maior;
+    while(1){
+        maior=0;
+        menor=9999999;
+        scanf("%d %d",&N,&A);
+        if(N==A&&A==0)return 0;
+        i=soma=0;
+        do{
+            scanf("%d",&v[i]);
+            soma+=v[i];
+            if(maior<v[i]) maior = v[i];
+            if(menor>v[i]) menor = v[i];
+            i++;
+        }while(i<N);
+        //printf("%d < %d\n",menor, maior);
+
+        if(soma==A) printf(":D\n");
+        else if(soma<A) printf("-:-\n");
+        else{
+            soma =0;
+            qsort(v,N,sizeof(int),min);
+            H = buscaBinaria(A, v,N,0.0,(double)maior);
+            printf("%.4f\n",H);
+
+        }
     }
-    printf("saiu\n");
-    return subs;
+    return 0;
 }
 
-
-int main() {
-	int T, N, i, j;
-	char * texto = (char*)malloc(MAXCHAR*sizeof(char));
-	char **subs = (char**)malloc(MAXCHAR*sizeof(char*));
-	scanf("%d",&T);
-	for(i = 0; i < T; i++)
-	{
-	    scanf("%d %s",&N, texto);
-
-	    int aux, index, maximo;
-	    aux = index = maximo = 0;
-	    subs = montaMatrixSub(texto, subs, N);
-	    for(j = 0; j < strlen(texto); j++)
-	    {
-	        aux = bmhs(texto, strlen(texto),subs[j], N);
-	        if (aux>=maximo) {maximo = aux; index = j;}
-	    }
-	    printf("Faisca %s",subs[j]);
-	}
-	for(j = 0; j < strlen(texto); j++) free(subs[j]);
-	free(subs);
-	free(texto);
-	return 0;
-}

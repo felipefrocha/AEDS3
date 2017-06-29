@@ -1,138 +1,159 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define bool short
-#define false 0
+#define MAX 10001
 #define true 1
+#define false 0
+#define bool short
 
-struct Edge
-{
-    int src, dest, weight;
-};
-struct Graph
-{
-    int V, E;
-    struct Edge* edge;
-};
-struct Graph* createGraph(int V, int E)
-{
-    struct Graph* graph = (struct Graph*) malloc( sizeof(struct Graph) );
-    graph->V = V;
-    graph->E = E;
+typedef struct{
+  int dano,mana;
+}feitico;
 
-    graph->edge = (struct Edge*) malloc( graph->E * sizeof( struct Edge ) );
 
-    return graph;
+int manatotal=100002;
+int **dp;
+typedef struct{
+    int filapossivel[MAX];
+    int posicao;
+}pilha;
+pilha*criaPilha(){
+    pilha * f = malloc(sizeof(pilha));
+    f->posicao=0;
 }
-struct subset
-{
-    int parent;
-    int rank;
-};
-int find(struct subset subsets[], int i)
-{
-    if (subsets[i].parent != i)
-    {
-            subsets[i].parent = find(subsets, subsets[i].parent);
-    }
-    return subsets[i].parent;
+void destroiPilha(pilha * f){
+    free(f);
 }
-void Union(struct subset subsets[], int x, int y)
-{
-    int xroot = find(subsets, x);
-    int yroot = find(subsets, y);
-
-    if (subsets[xroot].rank < subsets[yroot].rank)
-    {
-        subsets[xroot].parent = yroot;
-    }
-    else if (subsets[xroot].rank > subsets[yroot].rank)
-    {
-        subsets[yroot].parent = xroot;
-    }
-    else
-    {
-        subsets[yroot].parent = xroot;
-        subsets[xroot].rank++;
-    }
-}
-int myComp(const void* a, const void* b)
-{
-    struct Edge* a1 = (struct Edge*)a;
-    struct Edge* b1 = (struct Edge*)b;
-    return a1->weight > b1->weight;
-}
-void isort(struct Graph * g)
-{
+void copPilha(pilha * f, pilha *f1){
     int i;
-    struct Edge e;
-    for (i = 0; i < g->E-1; ++i)
-    {
-        if(g->edge[i].weight > g->edge[i+1].weight){
-            e = g->edge[i];
-            g->edge[i] = g->edge[i+1];
-            g->edge[i+1] = e;
-        }
-    }
-
+    for(i = 0;i<f->posicao;i++)
+        f1->filapossivel[i] = f->filapossivel[i];
+    f1->posicao = f->posicao;
 }
-int algKruskal(struct Graph* graph)
+
+void empilha(pilha * p,int f)
 {
-    int V = graph->V;
-    struct Edge result[V];
-    int e = 0;
-    int i = 0;
-    int v;
-
-    qsort(graph->edge, graph->E, sizeof(graph->edge[0]), myComp);
-    isort(graph);
-
-    struct subset *subsets = (struct subset*) malloc( V * sizeof(struct subset) );
-
-    for (v = 0; v < V; ++v)
-    {
-        subsets[v].parent = v;
-        subsets[v].rank = 0;
-    }
-    while (e < V - 1)
-    {
-        struct Edge next_edge = graph->edge[i++];
-
-        int x = find(subsets, next_edge.src);
-        int y = find(subsets, next_edge.dest);
-
-        if (x != y)
-        {
-            result[e++] = next_edge;
-            Union(subsets, x, y);
-        }
-
-    }
-    int aux=0;
-    for (i = 0; i < e; ++i)
-    {
-        aux +=result[i].weight;
-    }
-    free(subsets);
-    return aux;
+  p->filapossivel[p->posicao] = f;
+  p->posicao++;
+//  printf("%d  %d\n",p->posicao, f);
 }
 
-int main()
+int compFeit(const feitico * a, const feitico * b)
 {
-    int R, C,  V, W, P;
+  return (a->mana < b->mana)? -1 : 1;
+}
 
-    scanf("%d %d",&R,&C);
-    struct Graph* graph = createGraph(R, C);
-    int i;
-    for (i = 0 ; i < C; i ++)
+void display(pilha *p,const feitico * v)
+{
+  int aux,soma = 0;
+  aux = 0;
+  int i = 0;
+//  printf("Dano\tFilaI\tFila\n");
+    for ( i = 0; i < p->posicao; ++i){
+      soma+= v[p->filapossivel[i]].mana;
+      aux+=v[p->filapossivel[i]].dano;
+//      printf("%d\t%d\t%d\n",v[p->filapossivel[i]].dano,i,p->filapossivel[i]);
+    }
+//    printf("Dano total = %d | mana: %d | %d\n",aux,soma,manatotal);
+    if(soma<manatotal)manatotal = soma;
+    destroiPilha(p);
+}
+void printSubsetsRec(feitico* arr, int i, int sum,pilha * p)
+{
+    // If we reached end and sum is non-zero. We print
+    // p[] only if arr[0] is equal to sun OR dp[0][sum]
+    // is true.
+    if (i == 0 && sum != 0 && dp[0][sum])
     {
-        scanf("%d %d %d",&V,&W,&P);
-        graph->edge[i].src = V-1;
-        graph->edge[i].dest = W-1;
-        graph->edge[i].weight = P;
+      empilha(p,i);
+      display(p,arr);
+      return;
     }
 
-    printf("%d\n",algKruskal(graph));
-    free(graph->edge);
-    free(graph);
-    return 0;
+    // If sum becomes 0
+    if (i == 0 && sum == 0)
+    {
+        display(p,arr);
+        return;
+    }
+
+    // If given sum can be achieved after ignoring
+    // current element.
+    if (dp[i-1][sum])
+    {
+        // Create a new vector to store path
+      pilha* b = criaPilha();
+      copPilha(p,b);
+      printSubsetsRec(arr, i-1, sum, b);
+    }
+
+    // If given sum can be achieved after considering
+    // current element.
+    if (sum >= arr[i].dano && dp[i-1][sum-arr[i].dano])
+    {
+      empilha(p,i);
+      printSubsetsRec(arr, i-1, sum-arr[i].dano,p);
+    }
 }
+// Prints all subsets of arr[0..n-1] with sum 0.
+bool printAllSubsets(feitico* arr, int n, int sum)
+{
+    int i,j;
+    if (n == 0 || sum < 0)
+       return false;
+
+    // Sum 0 can always be achieved with 0 elements
+    dp = (int**)calloc(n,sizeof(int*));
+    for ( i=0; i < n; ++i)
+    {
+        dp[i] = calloc((sum + 1),sizeof(int));
+        dp[i][0] = true;
+    }
+
+    // Sum arr[0] can be achieved with single element
+    if (arr[0].dano <= sum)
+       dp[0][arr[0].dano] = true;
+
+    // Fill rest of the entries in dp[][]
+    for ( i = 1; i < n; ++i)
+        for ( j = 0; j < sum + 1; ++j)
+            dp[i][j] = (arr[i].dano <= j) ? dp[i-1][j] || dp[i-1][j-arr[i].dano] : dp[i - 1][j];
+    if (dp[n-1][sum] == false)
+    {
+        //printf("There are no subsets with sum %dn", sum);
+        return false;
+    }
+//    for ( i = 0; i < n; ++i){
+//      for ( j = 0; j < sum + 1; ++j)
+////        printf("%d  ",dp[i][j]);
+//      printf("\n");
+   // }
+
+    // Now recursively traverse dp[][] to find all
+    // paths from dp[n-1][sum]
+    pilha* p= criaPilha();
+    printSubsetsRec(arr, n-1, sum,p);
+ //   printf("termina aqui \n");
+    if(!p)destroiPilha(p);
+    for (i=0; i<n; ++i)
+      free(dp[i]);
+    free(dp);
+    return true;
+}
+int main(void)
+{
+  int i,qtdFeit,vida,aux;
+  double totMana;
+
+  scanf("%d %d",&qtdFeit,&vida);
+
+  feitico feiticos[MAX];
+
+  for(i = 0 ; i < qtdFeit ; i++)
+    scanf("%d %d",&feiticos[i].dano,&feiticos[i].mana);
+//  qsort(feiticos,qtdFeit,sizeof(feitico),compFeit);
+  if(printAllSubsets(feiticos,qtdFeit,vida))
+    printf("%d\n",manatotal);
+  else printf("-1\n");
+  return 0;
+}
+
