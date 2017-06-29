@@ -24,6 +24,7 @@ pilha*criaPilha(){
 }
 
 void destroiPilha(pilha * f){
+    free(f->filapossivel);
     free(f);
 }
 
@@ -70,6 +71,7 @@ void printSubsetsRec(feitico* arr, int i, int sum,pilha * p)
     {
       empilha(p,i);
       display(p,arr);
+      if(!p)destroiPilha(p);
       return;
     }
 
@@ -77,6 +79,7 @@ void printSubsetsRec(feitico* arr, int i, int sum,pilha * p)
     if (i == 0 && sum == 0)
     {
         display(p,arr);
+	if(!p)destroiPilha(p);
         return;
     }
 
@@ -138,8 +141,7 @@ bool printAllSubsets(feitico* arr, int n, int sum)
     printSubsetsRec(arr, n-1, sum,p);
  //   printf("termina aqui \n");
     if(!p)destroiPilha(p);
-    for (i=0; i<n; ++i)
-      free(dp[i]);
+    for (i=0; i<n; ++i) free(dp[i]);
     free(dp);
     return true;
 }
