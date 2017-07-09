@@ -16,15 +16,9 @@ int pesquisa(const int distancia, radar* v, int pesq,const int ultimo)
 {
  	int indice = pesq;
  	int auxLucro = 0;
- 	if(pesq == ultimo) return auxLucro;
- 	if (v[indice].posicao <= distancia){
-    	auxLucro+=v[indice].lucro;
-    	printf("Retorna\n");
-	}
-    auxLucro += pesquisa(distancia,v,indice+1,ultimo);
-    printf("NaoRetorna\n");
-        printf("%d %d\n",v[indice].lucro, auxLucro);
-    return v[indice].lucro+auxLucro;
+ 	if(pesq == ultimo && v[indice)] return;
+ 	if (v[indice].posicao <= v[indice-1]distancia){
+    
 }
 
 int main(){
